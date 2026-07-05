@@ -3,6 +3,7 @@
 import { CreditsSection } from "@/components/landing/credits-section";
 import { FeaturesSection } from "@/components/landing/features-section";
 import { HeroScrollytelling } from "@/components/landing/hero-scrollytelling";
+import { ImmersivePipelineSection } from "@/components/landing/immersive-pipeline-section";
 import { PricingSection } from "@/components/landing/pricing-section";
 import { SiteFooter, SiteHeader } from "@/components/landing/site-chrome";
 import { SkillsSection } from "@/components/landing/skills-section";
@@ -17,6 +18,7 @@ export default function Home() {
       <SiteHeader />
       <main className="flex-1">
         <HeroScrollytelling />
+        <ImmersivePipelineSection />
         <FeaturesSection />
         <SkillsSection />
         <CreditsSection />
