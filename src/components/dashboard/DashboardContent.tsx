@@ -9,7 +9,18 @@ import { useLocale } from "@/lib/use-locale";
 const activeStatuses = ["queued", "running", "needs_review"];
 
 function Metric({ title, value, description }: { title: string; value: string; description: string }) {
-  return <Card><CardHeader><CardDescription>{title}</CardDescription><CardTitle className="text-3xl">{value}</CardTitle></CardHeader><CardContent><p className="text-sm text-muted-foreground">{description}</p></CardContent></Card>;
+  return (
+    <Card className="group relative overflow-hidden border-border/50 bg-gradient-to-br from-card/60 to-card/40 backdrop-blur hover:shadow-lg hover:border-primary/30 transition-all duration-300">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-secondary-accent/0 group-hover:from-primary/5 group-hover:to-secondary-accent/5 transition-all duration-500" />
+      <CardHeader className="relative z-10">
+        <CardDescription className="group-hover:text-foreground/70 transition-colors">{title}</CardDescription>
+        <CardTitle className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary-accent bg-clip-text text-transparent">{value}</CardTitle>
+      </CardHeader>
+      <CardContent className="relative z-10">
+        <p className="text-sm text-muted-foreground group-hover:text-foreground/70 transition-colors">{description}</p>
+      </CardContent>
+    </Card>
+  );
 }
 
 export function DashboardContent() {
@@ -26,10 +37,13 @@ export function DashboardContent() {
         <Metric title={tx(locale, "Active jobs")} value={`${activeJobs}`} description={tx(locale, "Queued, running, or waiting for rights review.")} />
       </section>
 
-      <Link href="/ai" className="block rounded-2xl border border-border bg-card p-6 transition-colors hover:bg-muted/30">
-        <p className="text-sm font-semibold text-primary">{tx(locale, "AI Director")}</p>
-        <h2 className="mt-2 text-2xl font-semibold text-foreground">{tx(locale, "Describe the video outcome. Vipeo picks the workflow.")}</h2>
-        <p className="mt-2 text-sm text-muted-foreground">{tx(locale, "Start with a topic, product, language, and platform. The composer shows skill fit, cost, rights gates, and mock progress.")}</p>
+      <Link href="/ai" className="group relative block overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-primary-accent/10 via-card to-secondary-accent/10 p-8 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/50">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary-accent/0 via-transparent to-secondary-accent/0 group-hover:from-primary-accent/10 group-hover:to-secondary-accent/10 transition-all duration-500" />
+        <div className="relative z-10">
+          <p className="text-sm font-bold uppercase tracking-wider text-primary group-hover:text-primary-accent transition-colors">{tx(locale, "AI Director")}</p>
+          <h2 className="mt-3 text-3xl font-bold bg-gradient-to-r from-primary to-secondary-accent bg-clip-text text-transparent group-hover:from-primary-accent group-hover:to-secondary-accent transition-all">{tx(locale, "Describe the video outcome. Vipeo picks the workflow.")}</h2>
+          <p className="mt-4 text-base text-muted-foreground group-hover:text-foreground/80 transition-colors">{tx(locale, "Start with a topic, product, language, and platform. The composer shows skill fit, cost, rights gates, and mock progress.")}</p>
+        </div>
       </Link>
 
       <section id="skills" className="space-y-4">

@@ -82,13 +82,13 @@ function OrgMenu({ orgName, user, collapsed }: { orgName: string; user: CurrentU
         type="button"
         title={orgName}
         className={cn(
-          "group/button flex items-center rounded-lg border border-sidebar-border bg-sidebar text-left text-sm font-medium text-sidebar-foreground outline-none transition-colors hover:bg-sidebar-accent/40 cursor-pointer",
-          collapsed ? "size-8 justify-center" : "h-12 w-full gap-x-2 px-2"
+          "group/button flex items-center rounded-lg border border-sidebar-border bg-gradient-to-r from-sidebar to-sidebar/80 text-left text-sm font-semibold text-sidebar-foreground outline-none transition-all hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10 hover:from-sidebar hover:to-sidebar/70 cursor-pointer",
+          collapsed ? "size-10 justify-center" : "h-12 w-full gap-x-2 px-3"
         )}
       >
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-muted text-sm font-medium text-muted-foreground">{initial}</span>
-        {!collapsed && <span className="ml-2 flex-1 truncate text-sidebar-foreground">{orgName}</span>}
-        {!collapsed && <ChevronsUpDownIcon className="ml-auto size-4 shrink-0 text-muted-foreground" />}
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary-accent to-secondary-accent text-sm font-bold text-white shadow-lg">{initial}</span>
+        {!collapsed && <span className="ml-2 flex-1 truncate text-sidebar-foreground font-medium">{orgName}</span>}
+        {!collapsed && <ChevronsUpDownIcon className="ml-auto size-4 shrink-0 text-muted-foreground group-hover/button:text-primary transition-colors" />}
       </button>
 
       {isOpen && (
@@ -208,17 +208,17 @@ export function Sidebar({ sections, orgName, user, collapsed = false }: { sectio
   };
 
   return (
-    <aside className={cn("flex h-full shrink-0 flex-col bg-transparent p-2 transition-[width] duration-300 ease-in-out", collapsed ? "w-[66px]" : "w-[256px]")}>
-      <div className="relative flex size-full flex-col overflow-visible rounded-lg bg-sidebar shadow-sm ring-1 ring-sidebar-border">
-        <div className="flex justify-center p-2"><OrgMenu orgName={orgName} user={user} collapsed={collapsed} /></div>
-        <nav className="flex-1 space-y-4 overflow-y-auto px-2 py-2">
-          {sections.map((section) => <div key={section.label} className="space-y-1">
-            {!collapsed && <p className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-sidebar-foreground/70">{tx(locale, section.label)}</p>}
+    <aside className={cn("flex h-full shrink-0 flex-col bg-transparent p-2 transition-[width] duration-300 ease-in-out", collapsed ? "w-[74px]" : "w-[260px]")}>
+      <div className="relative flex size-full flex-col overflow-visible rounded-xl bg-gradient-to-b from-sidebar to-sidebar/95 shadow-lg ring-1 ring-sidebar-border/50 backdrop-blur">
+        <div className="flex justify-center p-3"><OrgMenu orgName={orgName} user={user} collapsed={collapsed} /></div>
+        <nav className="flex-1 space-y-3 overflow-y-auto px-2 py-3">
+          {sections.map((section) => <div key={section.label} className="space-y-2">
+            {!collapsed && <p className="px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-sidebar-foreground/50 hover:text-sidebar-foreground/70 transition-colors">{tx(locale, section.label)}</p>}
             {section.items.map((item) => {
               const Icon = iconMap[item.icon];
               const active = item.href === "/dashboard" || item.href === "/admin" ? pathname === item.href : pathname.startsWith(item.href);
               const label = labelByHref[item.href] ?? item.label;
-              return <Link key={item.href} href={item.href} title={collapsed ? label : undefined} className={cn("flex h-8 items-center gap-2 rounded-md text-sm transition-all", collapsed ? "size-8 justify-center p-2" : "w-full justify-start p-2", active ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground" : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground")}><Icon className="size-4 shrink-0" />{!collapsed && <span className="truncate">{label}</span>}</Link>;
+              return <Link key={item.href} href={item.href} title={collapsed ? label : undefined} className={cn("group flex h-10 items-center gap-3 rounded-lg text-sm font-medium transition-all duration-200", collapsed ? "size-10 justify-center px-2" : "w-full justify-start px-3", active ? "bg-gradient-to-r from-sidebar-primary/80 to-sidebar-primary/60 text-sidebar-primary-foreground shadow-md" : "text-sidebar-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground")}><Icon className={cn("size-5 shrink-0 transition-colors", active ? "text-sidebar-primary-foreground" : "text-sidebar-foreground group-hover:text-sidebar-accent-foreground")} />{!collapsed && <span className="truncate">{label}</span>}</Link>;
             })}
           </div>)}
         </nav>
@@ -237,13 +237,13 @@ export function DashboardHeader({ breadcrumb, onToggle }: { breadcrumb: string; 
   }, []);
 
   return (
-    <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border px-4">
-      <button onClick={onToggle} aria-label={tx(locale, "Toggle Sidebar")} className="mr-1 flex size-6 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:size-[18px]">
-        <PanelLeftIcon className="size-4" />
+    <header className="flex h-16 shrink-0 items-center gap-3 border-b border-border/50 bg-gradient-to-r from-background to-background/95 px-6 backdrop-blur-sm">
+      <button onClick={onToggle} aria-label={tx(locale, "Toggle Sidebar")} className="flex size-9 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition-all hover:bg-muted/80 hover:text-foreground hover:shadow-md">
+        <PanelLeftIcon className="size-5" />
       </button>
-      <span className="mx-1 h-4 w-px bg-border" />
-      <nav aria-label="breadcrumb">
-        <span className="text-sm font-medium text-foreground">{tx(locale, breadcrumb)}</span>
+      <span className="h-5 w-px bg-border/50" />
+      <nav aria-label="breadcrumb" className="flex-1">
+        <span className="text-sm font-semibold text-foreground/90">{tx(locale, breadcrumb)}</span>
       </nav>
     </header>
   );

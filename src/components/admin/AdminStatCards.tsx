@@ -15,5 +15,27 @@ export function AdminStatCards() {
     { label: "Live skills", value: String(launchSkills.filter((skill) => skill.status === "live").length) },
   ];
 
-  return <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">{stats.map((s) => <Card key={s.label} className="gap-1 p-4"><p className="text-sm font-medium text-muted-foreground">{tx(locale, s.label)}</p><p className="text-2xl font-semibold tracking-tight">{s.value}</p></Card>)}</div>;
+  const gradients = [
+    { bg: "from-blue-500/10 to-cyan-500/10", accent: "text-blue-600 dark:text-blue-400" },
+    { bg: "from-purple-500/10 to-pink-500/10", accent: "text-purple-600 dark:text-purple-400" },
+    { bg: "from-orange-500/10 to-red-500/10", accent: "text-orange-600 dark:text-orange-400" },
+    { bg: "from-green-500/10 to-emerald-500/10", accent: "text-green-600 dark:text-green-400" },
+  ];
+
+  return (
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {stats.map((s, index) => (
+        <Card
+          key={s.label}
+          className={`group relative overflow-hidden border-border/50 bg-gradient-to-br ${gradients[index].bg} backdrop-blur p-6 transition-all duration-300 hover:shadow-lg hover:border-primary/30`}
+        >
+          <div className="relative z-10">
+            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground group-hover:text-foreground/70 transition-colors">{tx(locale, s.label)}</p>
+            <p className={`mt-3 text-4xl font-bold tracking-tighter ${gradients[index].accent}`}>{s.value}</p>
+          </div>
+          <div className="absolute top-0 right-0 size-20 rounded-full bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity blur-xl -mr-8 -mt-8" />
+        </Card>
+      ))}
+    </div>
+  );
 }

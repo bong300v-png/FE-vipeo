@@ -19,23 +19,36 @@ export function FeaturesSection() {
   const { ref, inView } = useInView<HTMLDivElement>(0.15);
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-20">
-      <div className="mx-auto max-w-2xl text-center">
-        <h2 className="text-3xl font-semibold tracking-tight text-balance lg:text-4xl">{t(locale, "landing.features.title")}</h2>
-        <p className="mt-4 text-lg leading-relaxed text-muted-foreground text-pretty">{t(locale, "landing.features.body")}</p>
+    <section className="mx-auto max-w-6xl px-4 py-24">
+      <div className="mx-auto max-w-2xl text-center mb-16">
+        <h2 className="text-4xl font-bold tracking-tight text-balance bg-gradient-to-r from-primary-accent via-primary to-secondary-accent bg-clip-text text-transparent lg:text-5xl">
+          {t(locale, "landing.features.title")}
+        </h2>
+        <p className="mt-6 text-lg leading-relaxed text-muted-foreground text-pretty">{t(locale, "landing.features.body")}</p>
       </div>
       <div ref={ref} className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {featureItems.map((feature, index) => (
           <div
             key={feature.title}
             className={cn(
-              "rounded-xl border border-border bg-card p-6 transition-all duration-700 ease-out",
+              "group relative rounded-2xl border border-border/50 bg-card/50 backdrop-blur p-8 transition-all duration-700 ease-out card-hover",
+              "hover:border-primary/50 hover:bg-card/80",
               inView ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0",
             )}
             style={{ transitionDelay: `${index * 80}ms` }}
           >
-            <h3 className="font-medium">{tx(locale, feature.title)}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{tx(locale, feature.body)}</p>
+            {/* Gradient background on hover */}
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary-accent/5 via-transparent to-secondary-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            
+            <div className="relative z-10">
+              <div className="size-12 rounded-lg bg-gradient-to-br from-primary-accent to-secondary-accent p-2.5 mb-4 group-hover:shadow-lg group-hover:shadow-primary/20 transition-all duration-300">
+                <div className="size-full rounded bg-card flex items-center justify-center">
+                  <span className="text-xl font-bold text-primary">{index + 1}</span>
+                </div>
+              </div>
+              <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">{tx(locale, feature.title)}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground group-hover:text-foreground/80 transition-colors">{tx(locale, feature.body)}</p>
+            </div>
           </div>
         ))}
       </div>
