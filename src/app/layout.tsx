@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} dark h-full antialiased`}
+      className={`${inter.variable} h-full bg-background antialiased`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
@@ -36,11 +36,9 @@ export default function RootLayout({
               (function() {
                 try {
                   var theme = localStorage.getItem('theme');
-                  if (theme === 'light') {
-                    document.documentElement.classList.remove('dark');
-                  } else if (theme === 'dark') {
+                  if (theme === 'dark') {
                     document.documentElement.classList.add('dark');
-                  } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+                  } else {
                     document.documentElement.classList.remove('dark');
                   }
                 } catch (_) {}

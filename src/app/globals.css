@@ -142,8 +142,8 @@
   --cine-foreground: oklch(0.985 0 0);
   --scrim: oklch(0.145 0 0 / 32%);
   --scrim-strong: oklch(0.12 0 0 / 62%);
-  --primary-accent: oklch(0.68 0.22 280);
-  --secondary-accent: oklch(0.62 0.20 320);
+  --primary-accent: oklch(0.75 0.16 85);
+  --secondary-accent: oklch(0.205 0 0);
 }
 
 .dark {

@@ -15,7 +15,7 @@ export default function SignInPage() {
       />
       <div className="flex flex-col gap-y-4">
         <SignInButton mode="modal">
-          <button className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors">
+          <button className="w-full border border-foreground bg-foreground px-4 py-3 font-mono text-xs font-bold uppercase tracking-widest text-background transition-colors hover:bg-background hover:text-foreground">
             Sign in
           </button>
         </SignInButton>
@@ -23,7 +23,7 @@ export default function SignInPage() {
           New to Vipeo?{" "}
           <a
             href="/auth/sign-up"
-            className="underline hover:text-foreground"
+            className="font-semibold text-foreground underline underline-offset-2 hover:bg-[#facc15]"
           >
             Create an account
           </a>

@@ -3,12 +3,18 @@ import { LogoIcon } from "@/components/icons";
 
 export function AuthShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-background flex min-h-screen flex-col items-center justify-center px-4 py-8">
-      <div className="flex w-full max-w-[22rem] flex-col items-center gap-y-8 md:w-8/12 lg:w-5/12 xl:w-4/12">
+    <div className="relative flex min-h-screen flex-col items-center justify-center bg-background px-4 py-8">
+      {/* Sutera-style corner marks */}
+      <span className="pointer-events-none absolute left-6 top-6 font-mono text-[10px] font-bold uppercase tracking-widest text-foreground/40">VIPEO /25</span>
+      <span className="pointer-events-none absolute right-6 top-6 hidden font-mono text-[10px] font-bold uppercase tracking-widest text-foreground/40 sm:block">AI DIRECTOR STUDIO</span>
+      <span className="pointer-events-none absolute bottom-6 left-6 size-[10px] border border-foreground bg-[#facc15]" />
+      <span className="pointer-events-none absolute bottom-6 right-6 size-[10px] border border-foreground bg-background" />
+
+      <div className="flex w-full max-w-[24rem] flex-col items-center gap-y-8">
         <Link href="/" aria-label="Home Page" className="flex justify-center">
           <LogoIcon className="w-20 lg:w-[95px]" />
         </Link>
-        <div className="bg-background flex w-full flex-col gap-y-6 rounded-lg px-6 md:px-8 md:py-6 xl:py-8">
+        <div className="flex w-full flex-col gap-y-6 border border-foreground/15 bg-background px-6 py-8 md:px-8">
           {children}
         </div>
       </div>
@@ -24,9 +30,13 @@ export function AuthHeader({
   subtitle: string;
 }) {
   return (
-    <div className="flex flex-col gap-y-1">
-      <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
-      <p className="text-muted-foreground text-sm">{subtitle}</p>
+    <div className="flex flex-col gap-y-2">
+      <div className="flex items-center gap-2">
+        <span className="size-[10px] bg-[#facc15]" />
+        <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-foreground/40">[ Auth ]</span>
+      </div>
+      <h1 className="text-2xl font-black tracking-tighter">{title}</h1>
+      <p className="text-sm leading-relaxed text-muted-foreground">{subtitle}</p>
     </div>
   );
 }
@@ -34,11 +44,11 @@ export function AuthHeader({
 export function AuthDivider() {
   return (
     <div className="flex items-center gap-x-4">
-      <span className="bg-border h-px flex-1" />
-      <span className="text-muted-foreground text-xs tracking-wide uppercase">
+      <span className="h-px flex-1 bg-foreground/15" />
+      <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
         Or continue with
       </span>
-      <span className="bg-border h-px flex-1" />
+      <span className="h-px flex-1 bg-foreground/15" />
     </div>
   );
 }

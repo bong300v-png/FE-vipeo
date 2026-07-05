@@ -33,8 +33,22 @@ export function ClerkThemeProvider({ children }: { children: React.ReactNode }) 
     <ClerkProvider
       appearance={{
         baseTheme: theme === "dark" ? dark : undefined,
+        variables: {
+          colorPrimary: "#111111",
+          borderRadius: "0px",
+        },
         elements: {
           footer: { display: "none" },
+          card: {
+            border: "1px solid rgba(0, 0, 0, 0.15)",
+            boxShadow: "none",
+          },
+          formButtonPrimary: {
+            fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            fontWeight: 700,
+          },
           modalBackdrop: {
             backdropFilter: "blur(8px)",
             backgroundColor: theme === "dark" ? "rgba(0, 0, 0, 0.45)" : "rgba(255, 255, 255, 0.3)",

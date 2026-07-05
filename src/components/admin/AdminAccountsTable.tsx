@@ -7,40 +7,40 @@ import { useLocale } from "@/lib/use-locale";
 import type { AdminJob } from "@/types";
 
 const riskClass = {
-  low: "border-emerald-500/40 bg-emerald-500/15 text-emerald-500 dark:text-emerald-400 font-semibold",
-  medium: "border-amber-500/40 bg-amber-500/15 text-amber-600 dark:text-amber-400 font-semibold",
-  high: "border-destructive/40 bg-destructive/15 text-destructive dark:text-red-400 font-semibold",
+  low: "rounded-none border-foreground/30 bg-background font-mono text-[10px] font-bold uppercase tracking-widest text-foreground/70",
+  medium: "rounded-none border-black bg-[#facc15] font-mono text-[10px] font-bold uppercase tracking-widest text-black",
+  high: "rounded-none border-destructive bg-destructive font-mono text-[10px] font-bold uppercase tracking-widest text-white",
 };
 
 const statusClass = {
-  "needs_review": "text-amber-600 dark:text-amber-400 font-semibold",
-  "approved": "text-green-600 dark:text-green-400 font-semibold",
-  "completed": "text-blue-600 dark:text-blue-400 font-semibold",
+  "needs_review": "font-mono text-xs font-bold uppercase tracking-wider text-amber-700",
+  "approved": "font-mono text-xs font-bold uppercase tracking-wider text-emerald-700",
+  "completed": "font-mono text-xs font-bold uppercase tracking-wider text-foreground/70",
 };
 
 export function AdminAccountsTable({ jobs }: { jobs: AdminJob[] }) {
   const locale = useLocale();
   return (
-    <div className="overflow-x-auto rounded-xl border border-border/50 bg-card/30 backdrop-blur">
+    <div className="overflow-x-auto border border-foreground/15 bg-background">
       <Table>
-        <TableHeader className="bg-muted/40 border-b border-border/50">
+        <TableHeader className="border-b border-foreground/15 bg-muted/50">
           <TableRow className="hover:bg-transparent">
-            <TableHead className="font-bold text-foreground/80">{tx(locale, "Job ID")}</TableHead>
-            <TableHead className="font-bold text-foreground/80">{tx(locale, "User")}</TableHead>
-            <TableHead className="font-bold text-foreground/80">{tx(locale, "Skill")}</TableHead>
-            <TableHead className="font-bold text-foreground/80">{tx(locale, "Status")}</TableHead>
-            <TableHead className="font-bold text-foreground/80">{tx(locale, "Credits")}</TableHead>
-            <TableHead className="font-bold text-foreground/80">{tx(locale, "Risk")}</TableHead>
-            <TableHead className="font-bold text-foreground/80">{tx(locale, "Ops action")}</TableHead>
+            <TableHead className="font-mono text-[11px] font-bold uppercase tracking-widest text-foreground/60">{tx(locale, "Job ID")}</TableHead>
+            <TableHead className="font-mono text-[11px] font-bold uppercase tracking-widest text-foreground/60">{tx(locale, "User")}</TableHead>
+            <TableHead className="font-mono text-[11px] font-bold uppercase tracking-widest text-foreground/60">{tx(locale, "Skill")}</TableHead>
+            <TableHead className="font-mono text-[11px] font-bold uppercase tracking-widest text-foreground/60">{tx(locale, "Status")}</TableHead>
+            <TableHead className="font-mono text-[11px] font-bold uppercase tracking-widest text-foreground/60">{tx(locale, "Credits")}</TableHead>
+            <TableHead className="font-mono text-[11px] font-bold uppercase tracking-widest text-foreground/60">{tx(locale, "Risk")}</TableHead>
+            <TableHead className="font-mono text-[11px] font-bold uppercase tracking-widest text-foreground/60">{tx(locale, "Ops action")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {jobs.map((job) => (
             <TableRow 
               key={job.id} 
-              className="border-border/30 hover:bg-primary/5 transition-colors duration-200"
+              className="border-foreground/10 transition-colors duration-200 hover:bg-[#fffbeb]"
             >
-              <TableCell className="font-mono font-semibold text-primary">{job.id}</TableCell>
+              <TableCell className="font-mono font-semibold">{job.id}</TableCell>
               <TableCell className="font-medium">{job.user}</TableCell>
               <TableCell>{tx(locale, job.skill)}</TableCell>
               <TableCell>
