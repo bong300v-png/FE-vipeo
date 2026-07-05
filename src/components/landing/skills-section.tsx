@@ -16,7 +16,8 @@ export function SkillsSection() {
     <section id="skills" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20">
       <div className="grid items-center gap-8 lg:grid-cols-2">
         <div>
-          <h2 className="text-3xl font-semibold tracking-tight text-balance lg:text-4xl">{t(locale, "landing.skills.title")}</h2>
+          <p className="mb-3 font-mono text-xs font-bold uppercase tracking-widest text-foreground/40">[ 02 — {tx(locale, "Skills")} ]</p>
+          <h2 className="text-3xl font-black tracking-tighter text-balance lg:text-5xl">{t(locale, "landing.skills.title")}</h2>
           <p className="mt-3 text-lg leading-relaxed text-muted-foreground text-pretty">{t(locale, "landing.skills.body")}</p>
           <Link href="/dashboard#skills" className="mt-4 inline-block text-sm font-medium text-primary hover:underline">
             {t(locale, "landing.library")}

@@ -18,7 +18,8 @@ export function CreditsSection() {
       <div className="grid items-center gap-8 lg:grid-cols-2">
         <LoopVideo src="/videos/credits-flow.mp4" poster="/images/credits-poster.jpg" className="order-last aspect-video lg:order-first" overlay={false} />
         <div>
-          <h2 className="text-3xl font-semibold tracking-tight text-balance lg:text-4xl">{t(locale, "landing.credits.title")}</h2>
+          <p className="mb-3 font-mono text-xs font-bold uppercase tracking-widest text-foreground/40">[ 03 — Credits ]</p>
+          <h2 className="text-3xl font-black tracking-tighter text-balance lg:text-5xl">{t(locale, "landing.credits.title")}</h2>
           <p className="mt-3 text-lg leading-relaxed text-muted-foreground text-pretty">{t(locale, "landing.credits.body")}</p>
           <ul ref={ref} className="mt-8 flex flex-col gap-4">
             {stepKeys.map((key, index) => (

@@ -10,7 +10,8 @@ export function WorkspaceSection() {
   return (
     <section className="mx-auto max-w-6xl px-4 py-20">
       <div className="mx-auto max-w-2xl text-center">
-        <h2 className="text-3xl font-semibold tracking-tight text-balance lg:text-4xl">{t(locale, "landing.workspace.title")}</h2>
+        <p className="mb-3 font-mono text-xs font-bold uppercase tracking-widest text-foreground/40">[ 04 — Workspace ]</p>
+        <h2 className="text-3xl font-black tracking-tighter text-balance lg:text-5xl">{t(locale, "landing.workspace.title")}</h2>
         <p className="mt-4 text-lg leading-relaxed text-muted-foreground text-pretty">{t(locale, "landing.preview.subtitle")}</p>
       </div>
       <div className="relative mt-12">

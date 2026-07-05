@@ -2,8 +2,7 @@
 
 import { CreditsSection } from "@/components/landing/credits-section";
 import { FeaturesSection } from "@/components/landing/features-section";
-import { HeroScrollytelling } from "@/components/landing/hero-scrollytelling";
-import { InteractiveHeroes } from "@/components/landing/interactive-heroes";
+import { HeroSutera } from "@/components/landing/hero-sutera";
 import { PricingSection } from "@/components/landing/pricing-section";
 import { SiteFooter, SiteHeader } from "@/components/landing/site-chrome";
 import { SkillsSection } from "@/components/landing/skills-section";
@@ -14,11 +13,10 @@ export { SiteFooter, SiteHeader };
 
 export default function Home() {
   return (
-    <div className="flex min-h-full flex-col">
+    <div className="landing-light flex min-h-full flex-col">
       <SiteHeader />
       <main className="flex-1">
-        <HeroScrollytelling />
-        <InteractiveHeroes />
+        <HeroSutera />
         <FeaturesSection />
         <SkillsSection />
         <CreditsSection />
