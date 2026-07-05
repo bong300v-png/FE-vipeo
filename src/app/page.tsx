@@ -13,9 +13,9 @@ export { SiteFooter, SiteHeader };
 
 export default function Home() {
   return (
-    <div className="landing-light flex min-h-full flex-col">
+    <div className="landing-light flex min-h-full flex-col overflow-x-clip">
       <SiteHeader />
-      <main className="flex-1">
+      <main className="flex-1 overflow-x-clip">
         <HeroSutera />
         <FeaturesSection />
         <SkillsSection />

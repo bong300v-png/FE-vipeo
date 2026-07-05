@@ -151,13 +151,26 @@ function Standing({
 
 /* --------------------------------- studio --------------------------------- */
 
-function StudioScene({ sceneRef }: { sceneRef: React.RefObject<HTMLDivElement | null> }) {
+function StudioScene({
+  tiltRef,
+  sceneRef,
+}: {
+  tiltRef: React.RefObject<HTMLDivElement | null>;
+  sceneRef: React.RefObject<HTMLDivElement | null>;
+}) {
   return (
     <div
       className="relative mx-auto"
       style={{ perspective: 1400, width: 560, height: 560 }}
       aria-hidden="true"
     >
+      {/* tilt layer: GSAP rotationX only (applied FIRST, like the original rotateX→rotateZ order) */}
+      <div
+        ref={tiltRef}
+        className="absolute inset-0 will-change-transform"
+        style={{ transformStyle: "preserve-3d" }}
+      >
+      {/* spin layer: GSAP rotationZ only */}
       <div
         ref={sceneRef}
         data-scene
@@ -167,7 +180,6 @@ function StudioScene({ sceneRef }: { sceneRef: React.RefObject<HTMLDivElement | 
           height: 400,
           marginLeft: -200,
           marginTop: -230,
-          transform: "rotateX(58deg) rotateZ(-45deg)",
           transformStyle: "preserve-3d",
         }}
       >
@@ -301,6 +313,7 @@ function StudioScene({ sceneRef }: { sceneRef: React.RefObject<HTMLDivElement | 
         <Plate x={352} y={330} z={60} w={22} d={22} className="bg-[#facc15]" data-float />
         <Plate x={-20} y={330} z={140} w={14} d={14} className="bg-[#111]" data-float />
       </div>
+      </div>
     </div>
   );
 }
@@ -310,27 +323,39 @@ function StudioScene({ sceneRef }: { sceneRef: React.RefObject<HTMLDivElement | 
 export function HeroSutera() {
   const locale = useLocale();
   const rootRef = useRef<HTMLElement>(null);
+  const tiltRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const root = rootRef.current;
+    const tilt = tiltRef.current;
     const scene = sceneRef.current;
-    if (!root || !scene) return;
+    const stage = stageRef.current;
+    if (!root || !tilt || !scene || !stage) return;
 
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const BASE_RX = 58;
+    const BASE_RZ = -45;
+
+    const cleanups: Array<() => void> = [];
+
     const ctx = gsap.context(() => {
+      /* GSAP fully owns both transform layers — tilt gets X, scene gets Z (correct compose order) */
+      gsap.set(tilt, { rotationX: BASE_RX });
+      gsap.set(scene, { rotationZ: BASE_RZ });
+
       /* entrance */
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
       tl.from("[data-headline] > *", { yPercent: 110, opacity: 0, duration: 0.9, stagger: 0.12 })
-        .from(scene, { y: 80, opacity: 0, scale: 0.92, duration: 1.1 }, "-=0.5")
+        .from(stage, { y: 80, opacity: 0, duration: 1.1 }, "-=0.5")
         .from("[data-callout]", { opacity: 0, y: 16, duration: 0.6, stagger: 0.1 }, "-=0.6")
         .from("[data-corner]", { opacity: 0, y: 12, duration: 0.5, stagger: 0.08 }, "-=0.5")
         .from("[data-tiles] > *", { opacity: 0, scale: 0.6, duration: 0.5, stagger: 0.06 }, "-=0.4");
 
       if (prefersReduced) return;
 
-      /* idle float */
+      /* idle float (separate y-tween on inner scene, never touches rotation) */
       gsap.to(scene, { y: "-=10", duration: 3.2, yoyo: true, repeat: -1, ease: "sine.inOut" });
       gsap.utils.toArray<HTMLElement>("[data-float]").forEach((el, i) => {
         gsap.to(el, {
@@ -342,25 +367,97 @@ export function HeroSutera() {
         });
       });
 
-      /* mouse-driven rotation with smooth lerp */
-      const rz = gsap.quickTo(scene, "rotationZ", { duration: 1.1, ease: "power3.out" });
-      const rx = gsap.quickTo(scene, "rotationX", { duration: 1.1, ease: "power3.out" });
-      const stageX = stageRef.current ? gsap.quickTo(stageRef.current, "x", { duration: 1.4, ease: "power3.out" }) : null;
-      const stageY = stageRef.current ? gsap.quickTo(stageRef.current, "y", { duration: 1.4, ease: "power3.out" }) : null;
+      /* smooth lerp-ed rotation setters */
+      const rz = gsap.quickTo(scene, "rotationZ", { duration: 0.9, ease: "power3.out" });
+      const rx = gsap.quickTo(tilt, "rotationX", { duration: 0.9, ease: "power3.out" });
+      const stageX = gsap.quickTo(stage, "x", { duration: 1.3, ease: "power3.out" });
+      const stageY = gsap.quickTo(stage, "y", { duration: 1.3, ease: "power3.out" });
 
-      const onMove = (e: MouseEvent) => {
-        const nx = e.clientX / window.innerWidth - 0.5; // -0.5 .. 0.5
-        const ny = e.clientY / window.innerHeight - 0.5;
-        rz(-45 + nx * 22);
-        rx(58 + ny * 10);
-        stageX?.(nx * -24);
-        stageY?.(ny * -16);
+      /* auto sway — keeps the scene alive even with zero input (killed on first interaction) */
+      let sway: gsap.core.Tween | null = gsap.to(scene, {
+        rotationZ: BASE_RZ + 14,
+        duration: 4.5,
+        yoyo: true,
+        repeat: -1,
+        ease: "sine.inOut",
+      });
+      const killSway = () => {
+        if (sway) {
+          sway.kill();
+          sway = null;
+        }
       };
-      window.addEventListener("mousemove", onMove, { passive: true });
-      return () => window.removeEventListener("mousemove", onMove);
+
+      const applyInput = (nx: number, ny: number) => {
+        killSway();
+        rz(BASE_RZ + nx * 30);
+        rx(BASE_RX + ny * 12);
+        stageX(nx * -24);
+        stageY(ny * -16);
+      };
+
+      /* desktop: pointer position drives rotation */
+      const onPointerMove = (e: PointerEvent) => {
+        if (e.pointerType === "touch") return;
+        applyInput(e.clientX / window.innerWidth - 0.5, e.clientY / window.innerHeight - 0.5);
+      };
+      window.addEventListener("pointermove", onPointerMove, { passive: true });
+      cleanups.push(() => window.removeEventListener("pointermove", onPointerMove));
+
+      /* mobile: finger position drives rotation (page scroll still works) */
+      const onTouchMove = (e: TouchEvent) => {
+        const t = e.touches[0];
+        if (!t) return;
+        applyInput(t.clientX / window.innerWidth - 0.5, t.clientY / window.innerHeight - 0.5);
+      };
+      root.addEventListener("touchmove", onTouchMove, { passive: true });
+      cleanups.push(() => root.removeEventListener("touchmove", onTouchMove));
+
+      /* mobile: gyroscope tilt (Android works directly; iOS asks permission on first tap) */
+      const onOrientation = (e: DeviceOrientationEvent) => {
+        if (e.gamma == null || e.beta == null) return;
+        applyInput(
+          gsap.utils.clamp(-0.5, 0.5, e.gamma / 60),
+          gsap.utils.clamp(-0.5, 0.5, (e.beta - 45) / 90),
+        );
+      };
+      const enableGyro = () => {
+        type IOSOrientation = { requestPermission?: () => Promise<string> };
+        const doe = DeviceOrientationEvent as unknown as IOSOrientation;
+        if (typeof doe.requestPermission === "function") {
+          doe.requestPermission().then((state) => {
+            if (state === "granted") window.addEventListener("deviceorientation", onOrientation, { passive: true });
+          }).catch(() => {});
+        } else {
+          window.addEventListener("deviceorientation", onOrientation, { passive: true });
+        }
+      };
+      const onFirstTouch = () => {
+        enableGyro();
+        root.removeEventListener("touchstart", onFirstTouch);
+      };
+      root.addEventListener("touchstart", onFirstTouch, { passive: true });
+      cleanups.push(() => {
+        root.removeEventListener("touchstart", onFirstTouch);
+        window.removeEventListener("deviceorientation", onOrientation);
+      });
+
+      /* click / tap: cinematic punch-in on the scene */
+      const onPress = () => {
+        gsap.fromTo(
+          scene,
+          { scale: 1 },
+          { scale: 1.07, duration: 0.16, yoyo: true, repeat: 1, ease: "power2.out" },
+        );
+      };
+      stage.addEventListener("pointerdown", onPress);
+      cleanups.push(() => stage.removeEventListener("pointerdown", onPress));
     }, root);
 
-    return () => ctx.revert();
+    return () => {
+      cleanups.forEach((fn) => fn());
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -416,9 +513,12 @@ export function HeroSutera() {
       </div>
 
       {/* central 3D stage */}
-      <div ref={stageRef} className="relative z-20 flex min-h-[100svh] items-center justify-center pt-24 will-change-transform">
-        <div className="scale-[0.62] sm:scale-75 md:scale-90 lg:scale-100">
-          <StudioScene sceneRef={sceneRef} />
+      <div ref={stageRef} className="relative z-20 flex min-h-[100svh] items-center justify-center pt-28 will-change-transform md:pt-24">
+        {/* wrapper reserves the *scaled* layout box so mobile never overflows */}
+        <div className="relative size-[310px] sm:size-[420px] md:size-[500px] lg:size-[560px]">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.55] sm:scale-75 md:scale-[0.89] lg:scale-100">
+            <StudioScene tiltRef={tiltRef} sceneRef={sceneRef} />
+          </div>
         </div>
 
         {/* glass tiles overlay */}
@@ -509,6 +609,22 @@ export function HeroSutera() {
             </Link>
           ))}
         </div>
+      </div>
+
+      {/* mobile CTA row (corners are hidden on small screens) */}
+      <div data-corner className="absolute bottom-6 left-1/2 z-40 flex w-full max-w-[92vw] -translate-x-1/2 items-center justify-center gap-2 md:hidden">
+        <Link
+          href="/ai"
+          className="border border-black bg-black px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-widest text-white"
+        >
+          {tx(locale, "Create with AI")}
+        </Link>
+        <Link
+          href="#pricing"
+          className="border border-black bg-white px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-widest"
+        >
+          {tx(locale, "Pricing")}
+        </Link>
       </div>
 
       {/* screen-reader summary */}

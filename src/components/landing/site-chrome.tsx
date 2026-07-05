@@ -18,9 +18,9 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-6 px-4">
+      <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-3 md:gap-6 md:px-4">
         <Link href="/" aria-label="Home Page" className="shrink-0">
-          <LogoIcon className="w-20" />
+          <LogoIcon className="w-16 md:w-20" />
         </Link>
         <nav className="hidden flex-1 md:block">
           <ul className="flex items-center gap-1">
@@ -33,15 +33,15 @@ export function SiteHeader() {
             ))}
           </ul>
         </nav>
-        <div className="ml-auto flex items-center gap-2">
-          <LocaleSwitcher />
+        <div className="ml-auto flex min-w-0 items-center gap-1 md:gap-2">
+          <div className="hidden sm:block"><LocaleSwitcher /></div>
           <ThemeToggle />
           <Show when="signed-out">
             <SignInButton mode="modal">
-              <button className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground">{t(locale, "auth.signIn")}</button>
+              <button className="whitespace-nowrap rounded-lg px-2 py-2 text-sm font-medium text-muted-foreground hover:text-foreground md:px-3">{t(locale, "auth.signIn")}</button>
             </SignInButton>
             <SignUpButton mode="modal">
-              <button className="rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">{t(locale, "auth.signUp")}</button>
+              <button className="whitespace-nowrap rounded-lg bg-primary px-2.5 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 md:px-3">{t(locale, "auth.signUp")}</button>
             </SignUpButton>
           </Show>
           <Show when="signed-in">
