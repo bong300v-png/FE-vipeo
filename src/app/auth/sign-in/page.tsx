@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SignInButton } from "@clerk/nextjs";
-import { AuthShell, AuthHeader } from "@/components/auth/AuthShell";
+import { AuthShell, AuthHeader, Tx } from "@/components/auth/AuthShell";
 
 export const metadata: Metadata = {
   title: "Sign In",
