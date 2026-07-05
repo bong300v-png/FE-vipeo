@@ -55,7 +55,7 @@ export function PricingSection() {
                   <div className="mb-8">
                     <p className="text-4xl font-black tracking-tighter">{tx(locale, plan.price)}</p>
                     <p className={cn("mt-2 font-mono text-xs uppercase tracking-wide", isPopular ? "text-white/50" : "text-black/50")}>
-                      {plan.credits.toLocaleString()} credits / {tx(locale, "month")}
+                      {plan.credits.toLocaleString()} {tx(locale, "credits")} / {tx(locale, "month")}
                     </p>
                   </div>
 
